@@ -1,0 +1,66 @@
+/* The wall scale: a fixed display read from about 2 m. Load after starter.css.
+   It redefines the tokens once; no component changes. */
+
+:root {
+  /* The values are the design pixels they were drawn as on a 1920x1200 panel:
+     --t-hero is 9.25rem because 9.25 x 16 = 148. */
+  --t-hero: 9.25rem;      /* 148 */
+  --t-major: 4.75rem;     /* 76 */
+  --t-readout: 3rem;      /* 48 */
+  --t-headline: 2.125rem; /* 34 */
+  --t-body: 1.625rem;     /* 26 */
+  --t-label: 1.125rem;    /* 18 */
+  --t-min: 1rem;          /* 16: nothing smaller is legible across a room */
+
+  --rule: max(2px, 0.125rem);
+  --gap: 1.375rem;        /* 22 */
+  --pad: 1.75rem;         /* 28 */
+  --bracket: 1.625rem;    /* 26 */
+}
+
+/* The one value the whole scale hangs off. A tablet reports CSS pixels scaled
+   down by its device pixel ratio, so fixed pixel sizes come out at the wrong
+   physical size on a different DPR. Deriving the root size from the viewport
+   keeps the type at the same fraction of the screen whatever the browser
+   reports:
+
+     0.8333vw = 16px at 1920 wide      1.3333vh = 16px at 1200 tall
+
+   min() shrinks the type to fit an unexpected aspect ratio rather than
+   overflow the short axis. Change the two factors for a different panel:
+   1600 / width and 1600 / height. */
+html { font-size: max(8px, min(0.8333vw, 1.3333vh)); }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;   /* a wall never scrolls */
+}
+
+body {
+  line-height: 1.35;
+  user-select: none;
+  cursor: none;       /* no mouse on a wall */
+}
+
+/* Tiles sit in a fixed grid and must not grow with their content. */
+.instrument {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* An empty or failed tile still says something specific. */
+.void {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--slate);
+  font-family: var(--face-mono);
+  font-size: var(--t-body);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  text-align: center;
+}

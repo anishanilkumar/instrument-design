@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Instrument — House UI Style</title>
+<style>
+/* The printable guide, set in the style it describes. It is a rendering of
+   SKILL.md for people, not a source of rules. Fonts come from fonts/ beside
+   this file. Render from this folder with:
+   chrome --headless --no-pdf-header-footer --print-to-pdf=instrument-design.pdf guide.html */
+
+@font-face { font-family: "Archivo"; src: url("fonts/archivo-var.woff2") format("woff2-variations"); font-weight: 400 700; }
+@font-face { font-family: "Plex Mono"; src: url("fonts/plexmono-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Plex Mono"; src: url("fonts/plexmono-500.woff2") format("woff2"); font-weight: 500; }
+@font-face { font-family: "Manjari"; src: url("fonts/Manjari-Regular.woff2") format("woff2"); font-weight: 400; unicode-range: U+0D00-0D7F, U+200C-200D, U+20B9; }
+@font-face { font-family: "Manjari"; src: url("fonts/Manjari-Bold.woff2") format("woff2"); font-weight: 700; unicode-range: U+0D00-0D7F, U+200C-200D, U+20B9; }
+
+:root {
+  --ground: #0a0e14; --panel: #111823; --panel-lit: #16202e;
+  --arc: #3dd6f5; --arc-dim: #1d7f96; --gold: #e8a33d; --alert: #ff4d4d;
+  --engrave: #2a3543; --ink: #e8f1f8; --ink-dim: #7c8fa3;
+  --slate: #55647a; --slate-dim: #3a4657; --go: #4fd68a;
+  --face-data: "Archivo", "Manjari", system-ui, sans-serif;
+  --face-mono: "Plex Mono", ui-monospace, monospace;
+  --rule: 2px; --bracket: 14px;
+}
+
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  background: var(--ground); color: var(--ink);
+  font-family: var(--face-data); font-size: 10pt; line-height: 1.5;
+  font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1;
+}
+
+.sheet {
+  width: 210mm; height: 297mm; padding: 18mm 18mm 16mm;
+  background: var(--ground); position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 6mm;
+  page-break-after: always; break-after: page;
+}
+.sheet:last-child { page-break-after: auto; break-after: auto; }
+
+.runner {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-bottom: 3mm; border-bottom: var(--rule) solid var(--engrave);
+  font-family: var(--face-mono); font-size: 7.5pt; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--ink-dim);
+}
+.runner b { color: var(--ink); font-weight: 500; letter-spacing: 0.3em; }
+.folio { position: absolute; bottom: 9mm; right: 18mm; font-family: var(--face-mono); font-size: 7.5pt; color: var(--slate); letter-spacing: 0.08em; }
+
+h1 { font-size: 34pt; font-weight: 600; line-height: 1; letter-spacing: -0.03em; }
+h2 { font-size: 22pt; font-weight: 600; line-height: 1.05; letter-spacing: -0.02em; }
+h3 { font-size: 11.5pt; font-weight: 600; line-height: 1.2; }
+p { max-width: 62ch; }
+.lede { font-size: 11.5pt; color: var(--ink); max-width: 58ch; }
+.dim { color: var(--ink-dim); }
+code, .mono { font-family: var(--face-mono); font-size: 8.5pt; }
+code { color: var(--arc); }
+
+.label {
+  font-family: var(--face-mono); font-size: 7.5pt; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--arc-dim);
+}
+.stamp { font-family: var(--face-mono); font-size: 7.5pt; letter-spacing: 0.08em; color: var(--ink-dim); }
+
+.instrument { position: relative; background: var(--panel); padding: 5mm; }
+.instrument::before, .instrument::after {
+  content: ""; position: absolute; width: var(--bracket); height: var(--bracket);
+  border: var(--rule) solid var(--engrave);
+}
+.instrument::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+.instrument::after { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+.stack { display: flex; flex-direction: column; gap: 2mm; }
+
+/* ---- Cover --------------------------------------------------------------- */
+.cover { justify-content: space-between; }
+.cover-mark { display: flex; justify-content: center; padding-top: 14mm; }
+.cover-title .wordmark {
+  font-family: var(--face-mono); font-weight: 500; font-size: 11pt;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--arc); margin-bottom: 5mm;
+}
+.cover-title h1 { font-size: 54pt; }
+.cover-title p { margin-top: 5mm; font-size: 13pt; color: var(--ink-dim); max-width: 44ch; }
+.cover-foot { display: flex; justify-content: space-between; border-top: var(--rule) solid var(--engrave); padding-top: 3mm; }
+
+/* ---- Principles ---------------------------------------------------------- */
+.principles { counter-reset: p; display: flex; flex-direction: column; }
+.principles li { list-style: none; display: grid; grid-template-columns: 14mm 1fr; padding: 3.2mm 0; border-top: var(--rule) solid var(--engrave); }
+.principles li::before { counter-increment: p; content: "0" counter(p); font-family: var(--face-mono); font-size: 9pt; color: var(--arc-dim); padding-top: 1pt; }
+.principles h3 { margin-bottom: 1mm; }
+.principles p { color: var(--ink-dim); }
+
+/* ---- Palette ------------------------------------------------------------- */
+.swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; }
+.sw { background: var(--panel); }
+.sw .chip { height: 17mm; border-bottom: var(--rule) solid var(--engrave); }
+.sw .meta { padding: 2mm 2.5mm 2.5mm; }
+.sw .name { font-family: var(--face-mono); font-size: 8pt; font-weight: 500; color: var(--ink); }
+.sw .hex { font-family: var(--face-mono); font-size: 7.5pt; color: var(--ink-dim); }
+.sw .role { font-size: 8pt; color: var(--ink-dim); line-height: 1.35; margin-top: 1mm; }
+.accent-pair { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3mm; }
+.accent-pair .instrument { padding: 4mm; }
+.big-num { font-size: 30pt; font-weight: 600; line-height: 0.95; letter-spacing: -0.03em; }
+
+/* ---- Type ---------------------------------------------------------------- */
+.specimen { display: grid; grid-template-columns: 38mm 1fr; gap: 4mm; padding: 4mm 0; border-top: var(--rule) solid var(--engrave); align-items: baseline; }
+.specimen .big { font-size: 40pt; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+.specimen .mono-big { font-family: var(--face-mono); font-size: 22pt; font-weight: 500; letter-spacing: 0.06em; }
+.specimen .ml { font-family: "Manjari", sans-serif; font-size: 20pt; font-weight: 700; }
+table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+th { text-align: left; font-family: var(--face-mono); font-weight: 500; font-size: 7pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--arc-dim); padding: 0 2mm 2mm 0; }
+td { padding: 1.8mm 2mm 1.8mm 0; border-top: var(--rule) solid var(--engrave); vertical-align: baseline; }
+td.mono { color: var(--ink-dim); }
+.roles .row { display: grid; grid-template-columns: 22mm 1fr; gap: 3mm; align-items: baseline; padding: 2mm 0; border-top: var(--rule) solid var(--engrave); }
+
+/* ---- Components ---------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 10mm; padding: 0 5mm;
+  border: var(--rule) solid var(--engrave); border-radius: 2px; background: transparent; color: var(--ink);
+  font-family: var(--face-mono); font-size: 7.5pt; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.btn-primary { background: var(--arc); border-color: var(--arc); color: var(--ground); }
+.btn-quiet { color: var(--ink-dim); }
+.btn-danger { border-color: var(--alert); color: var(--alert); }
+.btn-add { border-style: dashed; color: var(--arc); width: 100%; }
+.btns { display: flex; flex-wrap: wrap; gap: 2.5mm; }
+.input { min-height: 10mm; padding: 0 3mm; display: flex; align-items: center; background: var(--panel); border: var(--rule) solid var(--engrave); color: var(--slate); }
+.input.focus { border-color: var(--arc-dim); color: var(--ink); }
+.tick { width: 4.5mm; height: 4.5mm; border: var(--rule) solid var(--arc-dim); position: relative; flex: none; }
+.tick.on::after { content: ""; position: absolute; inset: 0.8mm; background: var(--arc); }
+.ticks { display: flex; flex-direction: column; }
+.ticks div { display: flex; gap: 3mm; align-items: center; padding: 2mm 0; border-top: var(--rule) solid var(--engrave); }
+.ticks div:first-child { border-top: 0; }
+.ticks .done { color: var(--ink-dim); text-decoration: line-through; text-decoration-color: var(--slate); }
+.dot { width: 2.2mm; height: 2.2mm; background: var(--arc); display: inline-block; }
+.dots { display: flex; gap: 5mm; }
+.dots span { display: inline-flex; align-items: center; gap: 2mm; font-family: var(--face-mono); font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-dim); }
+.listrow { display: flex; align-items: center; gap: 3mm; padding: 2.5mm 0; border-top: var(--rule) solid var(--engrave); }
+.listrow:first-child { border-top: 0; }
+.listrow .t { font-weight: 600; font-size: 10.5pt; line-height: 1.2; }
+.listrow .w { font-size: 8pt; color: var(--ink-dim); }
+.listrow .m { margin-left: auto; text-align: right; font-family: var(--face-mono); font-size: 7.5pt; color: var(--ink-dim); }
+.verdict { background: var(--panel); border-left: 1.4mm solid var(--gold); padding: 3mm 4mm; }
+.verdict .h { font-weight: 600; font-size: 11pt; }
+
+/* ---- States -------------------------------------------------------------- */
+.state .val { font-size: 22pt; font-weight: 600; line-height: 1; letter-spacing: -0.02em; margin: 2mm 0 1.5mm; }
+.state p { font-size: 8pt; color: var(--ink-dim); line-height: 1.4; }
+.sched { text-decoration: underline dotted var(--ink-dim); text-underline-offset: 3pt; }
+
+/* ---- Lists --------------------------------------------------------------- */
+.donts li, .check li { list-style: none; padding: 1.8mm 0; border-top: var(--rule) solid var(--engrave); display: grid; grid-template-columns: 6mm 1fr; font-size: 9pt; }
+.donts li::before { content: "×"; color: var(--alert); font-family: var(--face-mono); }
+.check { counter-reset: c; }
+.check li::before { counter-increment: c; content: counter(c); color: var(--arc-dim); font-family: var(--face-mono); }
+.voice .q { font-family: var(--face-mono); font-size: 8.5pt; }
+.voice .yes { color: var(--arc); } .voice .no { color: var(--ink-dim); text-decoration: line-through; text-decoration-color: var(--alert); }
+</style>
+</head>
+<body>
+
+<!-- 1 · Cover ---------------------------------------------------------------->
+<section class="sheet cover">
+  <div class="runner"><b>Instrument</b><span>House UI style · v2 · November 2026</span></div>
+
+  <div class="cover-mark">
+    <svg width="300" height="300" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+      <circle cx="100" cy="100" r="92" stroke="#2a3543" stroke-width="2"/>
+      <g stroke-linecap="butt">
+        <!-- 60 index ticks; the first 24 lit, as elapsed minutes on the reactor dial -->
+        <g id="ticks"></g>
+      </g>
+      <circle cx="100" cy="100" r="70" stroke="#3dd6f5" stroke-width="3" stroke-dasharray="330 110" transform="rotate(-90 100 100)"/>
+      <circle cx="100" cy="100" r="62" stroke="#2a3543" stroke-width="2"/>
+      <text x="100" y="112" text-anchor="middle" font-family="Archivo" font-weight="600" font-size="38" fill="#e8f1f8" letter-spacing="-1">21:24</text>
+      <text x="100" y="134" text-anchor="middle" font-family="Plex Mono" font-weight="500" font-size="8" fill="#1d7f96" letter-spacing="2">LIVE</text>
+    </svg>
+  </div>
+
+  <div class="cover-title">
+    <div class="wordmark">Instrument</div>
+    <h1>A machined instrument, not a glowing screen.</h1>
+    <p>The design language of the Jarvis wall panel and Recipie, written down so that every new project starts from it.</p>
+  </div>
+
+  <div class="cover-foot">
+    <span class="stamp">Source of truth · SKILL.md and starter.css</span>
+    <span class="stamp">Anish Sheela</span>
+  </div>
+</section>
+
+<!-- 2 · Principles ----------------------------------------------------------->
+<section class="sheet">
+  <div class="runner"><b>Instrument</b><span>01 · Principles</span></div>
+  <div class="stack">
+    <span class="label">Where it comes from</span>
+    <h2>The Iron Man HUD, built the way real optics are built.</h2>
+  </div>
+  <p class="lede">The brief was the Iron Man HUD, and the design commits to it. What it refuses is the usual execution: hairline strokes, hex grids, drifting particles, glow and decorative 9px text. On a screen that is lit all day and read from across a room, those disappear or exhaust. The MCU HUDs are precision optics: engraved arcs, index ticks, machined bezels. It sits closer to an aviation chronograph than to a screensaver.</p>
+
+  <ol class="principles">
+    <li><div><h3>The display never lies.</h3><p>Data that may be old looks old: it loses its colour and stops counting, and never keeps counting down on numbers it can't refresh. "Nothing planned" beats a confident wrong answer.</p></div></li>
+    <li><div><h3>Motion means something changed.</h3><p>In its resting state nothing moves, except at most one purposeful indicator. Things animate when they change, not for atmosphere. Reduced-motion is always respected.</p></div></li>
+    <li><div><h3>Every colour has a job.</h3><p>Cool arc-blue is live, warm gold is attention, red is the one truly bad state. Rare colours stay rare, so they read when they appear.</p></div></li>
+    <li><div><h3>Legibility over decoration.</h3><p>There is a hard minimum type size. A label nobody can read is decoration pretending to be information.</p></div></li>
+    <li><div><h3>Brackets, not boxes.</h3><p>A surface is a raised panel with two engraved corner brackets, not a rounded, bordered, shadowed card.</p></div></li>
+    <li><div><h3>Offline is a designed state.</h3><p>Fonts are self-hosted. Losing the connection desaturates the interface to slate, like an instrument on backup power, not a broken web page.</p></div></li>
+    <li><div><h3>Decisions are written down.</h3><p>Stylesheets explain why: the measured number, the alternative that was tried and rejected. That is part of the style.</p></div></li>
+  </ol>
+  <span class="folio">02</span>
+</section>
+
+<!-- 3 · Colour --------------------------------------------------------------->
+<section class="sheet">
+  <div class="runner"><b>Instrument</b><span>02 · Colour</span></div>
+  <div class="stack">
+    <span class="label">Palette</span>
+    <h2>Dark, never black. Two accent temperatures.</h2>
+  </div>
+  <p class="dim">There is no light theme. The ground is a deep anodized navy-slate, because pure black on an LCD reads as a dead panel rather than a dark one. The identity is in the pairing: Iron Man is gold <em>and</em> arc-blue, and two hues let "important" be told apart from "live".</p>
+
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#0a0e14;outline:2px solid #2a3543;outline-offset:-2px"></div><div class="meta"><div class="name">ground</div><div class="hex">#0A0E14</div><div class="role">Page background, theme-color, icon field</div></div></div>
+    <div class="sw"><div class="chip" style="background:#111823"></div><div class="meta"><div class="name">panel</div><div class="hex">#111823</div><div class="role">Raised instrument face</div></div></div>
+    <div class="sw"><div class="chip" style="background:#16202e"></div><div class="meta"><div class="name">panel-lit</div><div class="hex">#16202E</div><div class="role">Focused or expanded surface</div></div></div>
+    <div class="sw"><div class="chip" style="background:#2a3543"></div><div class="meta"><div class="name">engrave</div><div class="hex">#2A3543</div><div class="role">Rules, brackets, borders, hover fill</div></div></div>
+
+    <div class="sw"><div class="chip" style="background:#e8f1f8"></div><div class="meta"><div class="name">ink</div><div class="hex">#E8F1F8</div><div class="role">Primary text</div></div></div>
+    <div class="sw"><div class="chip" style="background:#7c8fa3"></div><div class="meta"><div class="name">ink-dim</div><div class="hex">#7C8FA3</div><div class="role">Secondary text, timestamps</div></div></div>
+    <div class="sw"><div class="chip" style="background:#55647a"></div><div class="meta"><div class="name">slate</div><div class="hex">#55647A</div><div class="role">Offline, unknown, placeholders</div></div></div>
+    <div class="sw"><div class="chip" style="background:#3a4657"></div><div class="meta"><div class="name">slate-dim</div><div class="hex">#3A4657</div><div class="role">Offline stand-in for arc-dim</div></div></div>
+
+    <div class="sw"><div class="chip" style="background:#3dd6f5"></div><div class="meta"><div class="name">arc</div><div class="hex">#3DD6F5</div><div class="role">Live data, links, primary action, focus</div></div></div>
+    <div class="sw"><div class="chip" style="background:#1d7f96"></div><div class="meta"><div class="name">arc-dim</div><div class="hex">#1D7F96</div><div class="role">Arc at rest: labels, section heads</div></div></div>
+    <div class="sw"><div class="chip" style="background:#e8a33d"></div><div class="meta"><div class="name">gold</div><div class="hex">#E8A33D</div><div class="role">Warm data, warnings, "almost", unsent</div></div></div>
+    <div class="sw"><div class="chip" style="background:#ff4d4d"></div><div class="meta"><div class="name">alert</div><div class="hex">#FF4D4D</div><div class="role">The single worst state. Rare.</div></div></div>
+  </div>
+
+  <div class="stack">
+    <span class="label">The accents at work</span>
+    <div class="accent-pair">
+      <div class="instrument"><span class="label">Line 2 · Harbour</span><div class="big-num" style="color:var(--arc);margin-top:2mm">3<span style="font-size:13pt"> min</span></div><span class="stamp">Live</span></div>
+      <div class="instrument"><span class="label">Line 5 · Airport</span><div class="big-num" style="color:var(--gold);margin-top:2mm">7<span style="font-size:13pt"> min</span></div><span class="stamp">+2 late</span></div>
+      <div class="instrument"><span class="label">Bus 48 · Centre</span><div class="big-num" style="color:var(--alert);margin-top:2mm">—</div><span class="stamp">Cancelled</span></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="stack">
+      <span class="label">Adding a colour</span>
+      <p class="dim" style="font-size:9pt">Allowed when a project needs a meaning the palette doesn't have. Pick it at the arc's brightness so it belongs to the family, give it a semantic alias, and note why in a comment. Recipie's cook asked for a traffic light, so it added <code>go #4FD68A</code> as <code>ready</code>, with gold as <code>almost</code> and alert as <code>no</code>.</p>
+    </div>
+    <div class="stack">
+      <span class="label">Offline</span>
+      <p class="dim" style="font-size:9pt">The tokens are swapped wholesale on a root attribute. Arc becomes slate, gold becomes <code>#8A7350</code>, ink softens to <code>#B9C4D1</code>. No component knows it is drawing an offline state.</p>
+    </div>
+  </div>
+  <span class="folio">03</span>
+</section>
+
+<!-- 4 · Type ----------------------------------------------------------------->
+<section class="sheet">
+  <div class="runner"><b>Instrument</b><span>03 · Typography</span></div>
+  <div class="stack">
+    <span class="label">Typefaces</span>
+    <h2>Archivo reads out. Plex Mono engraves.</h2>
+  </div>
+
+  <div>
+    <div class="specimen"><div><div class="label">Archivo</div><div class="stamp">Variable 400–700 · data, headings, body</div></div><div class="big">21:24 · 3 min</div></div>
+    <div class="specimen"><div><div class="label">IBM Plex Mono</div><div class="stamp">400 / 500 · labels, stamps, buttons</div></div><div class="mono-big">NEXT TRAIN</div></div>
+    <div class="specimen"><div><div class="label">Manjari</div><div class="stamp">400 / 700 · Malayalam only</div></div><div class="ml">കോഴിക്കോടൻ ബിരിയാണി</div></div>
+  </div>
+  <p class="dim" style="font-size:9pt">All three are OFL-licensed and self-hosted; never a CDN. Manjari sits behind a Malayalam <code>unicode-range</code>, so pages without Malayalam never download it. Numerals are always tabular, so a countdown going from 11 to 10 doesn't make the row twitch.</p>
+
+  <div class="grid2" style="align-items:start">
+    <div class="roles">
+      <span class="label">Roles</span>
+      <div class="row"><span class="stamp">hero</span><span style="font-size:22pt;font-weight:600;letter-spacing:-0.03em;line-height:1">148</span></div>
+      <div class="row"><span class="stamp">readout</span><span style="font-size:14pt;font-weight:500">Partly cloudy</span></div>
+      <div class="row"><span class="stamp">body</span><span>Simmer until the oil separates.</span></div>
+      <div class="row"><span class="stamp">label</span><span class="label">Ingredients</span></div>
+      <div class="row"><span class="stamp">stamp</span><span class="stamp">Updated 21:22</span></div>
+      <div class="row"><span class="stamp">wordmark</span><span style="font-family:var(--face-mono);font-weight:500;letter-spacing:0.3em">RECIPIE</span></div>
+    </div>
+    <div>
+      <span class="label">Scale by viewing distance</span>
+      <table style="margin-top:2mm">
+        <tr><th>Token</th><th>Wall · 2 m</th><th>Phone · arm</th></tr>
+        <tr><td>hero</td><td class="mono">148px</td><td class="mono">52–88px</td></tr>
+        <tr><td>major</td><td class="mono">76px</td><td class="mono">28–44px</td></tr>
+        <tr><td>readout</td><td class="mono">48px</td><td class="mono">22–30px</td></tr>
+        <tr><td>headline</td><td class="mono">34px</td><td class="mono">20px</td></tr>
+        <tr><td>body</td><td class="mono">26px</td><td class="mono">16px</td></tr>
+        <tr><td>label</td><td class="mono">18px</td><td class="mono">13px</td></tr>
+        <tr><td>min (floor)</td><td class="mono">16px</td><td class="mono">12px</td></tr>
+      </table>
+      <p class="dim" style="font-size:8.5pt;margin-top:2mm">Rescale by redefining the tokens once, never per component. Nothing goes below the floor.</p>
+    </div>
+  </div>
+  <span class="folio">04</span>
+</section>
+
+<!-- 5 · Structure & components ----------------------------------------------->
+<section class="sheet">
+  <div class="runner"><b>Instrument</b><span>04 · Structure &amp; components</span></div>
+  <div class="stack">
+    <span class="label">The instrument</span>
+    <h2>Two brackets and a 2px rule.</h2>
+  </div>
+
+  <div class="grid2" style="align-items:start">
+    <div class="instrument" style="padding:6mm">
+      <span class="label">Tonight</span>
+      <div style="font-size:36pt;font-weight:600;letter-spacing:-0.03em;line-height:0.95;color:var(--go);margin:2mm 0">12</div>
+      <span class="stamp">recipes ready to cook</span>
+    </div>
+    <div class="stack" style="font-size:9pt">
+      <p class="dim">The panel face is <code>panel</code>, with an engraved bracket in the top-left and bottom-right corners only. That's the machined bezel instead of a card.</p>
+      <p class="dim"><b style="color:var(--ink)">Rules never drop below 2px.</b> Hairlines smear or vanish, and the engraved look lives entirely in them. Radius is 0 or 2px. Nothing soft: no shadows, glows, blur or visible gradients.</p>
+      <p class="dim">Touch targets are at least 44px. Page content sits in a 54rem column.</p>
+    </div>
+  </div>
+
+  <div class="grid2" style="align-items:start">
+    <div class="stack" style="gap:4mm">
+      <div class="stack">
+        <span class="label">Buttons</span>
+        <div class="btns"><span class="btn btn-primary">Start cooking</span><span class="btn">Edit</span><span class="btn btn-quiet">Cancel</span><span class="btn btn-danger">Delete</span></div>
+        <span class="btn btn-add">+ Add ingredient</span>
+      </div>
+      <div class="stack">
+        <span class="label">Input</span>
+        <div class="input">Search recipes</div>
+        <div class="input focus">biryani</div>
+      </div>
+      <div class="stack">
+        <span class="label">Status</span>
+        <div class="dots"><span><i class="dot"></i>Synced</span><span><i class="dot" style="background:var(--gold)"></i>Error</span><span><i class="dot" style="background:var(--slate)"></i>Offline</span></div>
+      </div>
+    </div>
+    <div class="stack" style="gap:4mm">
+      <div class="stack">
+        <span class="label">Tick boxes</span>
+        <div class="instrument ticks" style="padding:2mm 5mm">
+          <div><i class="tick on"></i><span class="done">Basmati rice · 400 g</span></div>
+          <div><i class="tick"></i><span>Ghee · 3 tbsp</span></div>
+          <div><i class="tick"></i><span>Fried onions · 2 medium</span></div>
+        </div>
+      </div>
+      <div class="stack">
+        <span class="label">List rows</span>
+        <div class="instrument" style="padding:1mm 5mm">
+          <div class="listrow"><div><div class="t">Chicken curry</div><div class="w">Everything in the kitchen</div></div><div class="m">45 min</div></div>
+          <div class="listrow"><div><div class="t">Appam &amp; stew</div><div class="w" style="color:var(--gold)">Missing coconut milk</div></div><div class="m">1 h 10</div></div>
+        </div>
+      </div>
+      <div class="verdict"><span class="label" style="color:var(--gold)">Almost</span><div class="h">One thing short</div><div class="dim" style="font-size:8.5pt">Coconut milk, or swap in cream.</div></div>
+    </div>
+  </div>
+  <span class="folio">05</span>
+</section>
+
+<!-- 6 · Motion & states ------------------------------------------------------>
+<section class="sheet">
+  <div class="runner"><b>Instrument</b><span>05 · Motion &amp; states</span></div>
+  <div class="stack">
+    <span class="label">Motion</span>
+    <h2>Still until something happens.</h2>
+  </div>
+  <div class="grid3">
+    <div class="instrument"><span class="label">Easing</span><p class="mono" style="margin-top:2mm">cubic-bezier(.2,.7,.3,1)</p><p class="dim" style="font-size:8pt;margin-top:1mm">Quick out, long settle. 200–520ms.</p></div>
+    <div class="instrument"><span class="label">Attention</span><p class="mono" style="margin-top:2mm">steps(2)</p><p class="dim" style="font-size:8pt;margin-top:1mm">A mechanical blink, never an elastic bounce or soft pulse.</p></div>
+    <div class="instrument"><span class="label">Change</span><p class="mono" style="margin-top:2mm">rotate &amp; fade</p><p class="dim" style="font-size:8pt;margin-top:1mm">No scrolling tickers. New content arrives once and settles.</p></div>
+  </div>
+
+  <div class="stack">
+    <span class="label">States</span>
+    <h2>Design every one of them.</h2>
+  </div>
+  <div class="grid3">
+    <div class="instrument state"><span class="label">Live</span><div class="val" style="color:var(--arc)">4 min</div><p>Arc. The data is fresh and still updating.</p></div>
+    <div class="instrument state"><span class="label">Warning</span><div class="val" style="color:var(--gold)">9 min</div><p>Gold. Late, almost, needs a look.</p></div>
+    <div class="instrument state"><span class="label">Failed</span><div class="val" style="color:var(--alert)">Cancelled</div><p>Alert. Reserved for the one worst outcome.</p></div>
+    <div class="instrument state"><span class="label">Scheduled</span><div class="val"><span class="sched">21:40</span></div><p>Timetable, not live: a dotted underline, not a new colour.</p></div>
+    <div class="instrument state"><span class="label">Stale</span><div class="val" style="color:var(--ink-dim)">6 min</div><p>May be old: the colour drops out and counting stops. The age stays readable. <span class="stamp">As of 21:02</span></p></div>
+    <div class="instrument state" style="opacity:.34"><span class="label">Expired</span><div class="val">21:14</div><p>No longer true: the whole surface recedes to 34%. Nothing here is meant to be read.</p></div>
+    <div class="instrument state" style="--arc:#55647a;--arc-dim:#3a4657"><span class="label">Offline</span><div class="val" style="color:var(--slate)">4 min</div><p>Slate. The last value stays, with an honest age stamp.</p></div>
+    <div class="instrument state"><span class="label">Empty</span><div style="font-family:var(--face-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--slate);margin:3mm 0 1.5mm;font-size:9pt">Nothing planned</div><p>Centred, quiet, one action. Never a cheerful illustration.</p></div>
+    <div class="instrument state"><span class="label">Unsent</span><div style="font-family:var(--face-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:3mm 0 1.5mm;font-size:9pt">2 changes unsent</div><p>Local-only edits get a gold mono marker until they land.</p></div>
+  </div>
+
+  <span class="folio">06</span>
+</section>
+
+<!-- 7 · Identity, voice, rules ----------------------------------------------->
+<section class="sheet">
+  <div class="runner"><b>Instrument</b><span>06 · Identity, voice, charts &amp; checklist</span></div>
+
+  <div class="grid2" style="align-items:start">
+    <div class="stack">
+      <span class="label">App icon</span>
+      <div style="display:flex;gap:5mm;align-items:center">
+        <svg width="110" height="110" viewBox="0 0 512 512" style="border-radius:22%;flex:none;width:30mm;height:30mm">
+          <rect width="512" height="512" fill="#0A0E14"/>
+          <g transform="translate(96 84) scale(16)" fill="none" stroke="#3dd6f5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.5 15V7a9 9 0 0 1 11 0v8Z"/><path d="M6 10.5h8"/><path d="M6.5 13h1.5"/><path d="M13 13h1.5"/><path d="M2.5 18h15"/>
+          </g>
+          <path d="M136 416h240" stroke="#3dd6f5" stroke-opacity="0.35" stroke-width="10" stroke-linecap="round"/>
+        </svg>
+        <p class="dim" style="font-size:8.5pt">Full-bleed ground so the OS mask only ever cuts dark. One arc-blue line mark in the central 80%, with an optional engraved rule under it at 35%. Line icons use a 20-unit grid, 1.6 stroke, round caps, no fill.</p>
+      </div>
+    </div>
+    <div class="stack voice">
+      <span class="label">Voice</span>
+      <p class="dim" style="font-size:9pt">Terse, instrument-like, honest. Short uppercase nouns for labels. If a number might be wrong, say how old it is.</p>
+      <div class="q yes">Nothing planned</div><div class="q no">Oops! Looks like nothing's planned yet!</div>
+      <div class="q yes">Updated 4 min ago</div><div class="q no">Real-time data</div>
+    </div>
+  </div>
+
+  <div class="grid2" style="align-items:start">
+    <div>
+      <span class="label">Never</span>
+      <ul class="donts" style="margin-top:2mm">
+        <li>Pure black, neon glow, drop shadows, glass blur, visible gradients</li>
+        <li>1px hairlines, rounded cards, pill-shaped buttons</li>
+        <li>Hex grids, particles, scanlines, shimmer, ambient animation</li>
+        <li>Text below the floor, or low-contrast "decorative" labels</li>
+        <li>An extra accent colour used for decoration</li>
+        <li>Fonts from a CDN</li>
+        <li>Template defaults: Inter, Tailwind slate/indigo, Material</li>
+      </ul>
+    </div>
+    <div>
+      <span class="label">Starting a project</span>
+      <ol class="check" style="margin-top:2mm">
+        <li>Copy the starter stylesheet and the fonts folder, licences included.</li>
+        <li>Head the stylesheet with its lineage and any deliberate departures.</li>
+        <li>Name semantic aliases for the project's states; justify new colours.</li>
+        <li>Design offline, stale, expired, empty and loading states.</li>
+        <li>Icon, theme-color #0A0E14, manifest.</li>
+        <li>Run lint.sh and fix every failure.</li>
+        <li>Look at it at 375px, offline, and with reduced motion on.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="grid2" style="align-items:start">
+    <div class="instrument" style="padding:4mm 5mm">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="label">This week</span><span class="stamp">Target 7 h</span></div>
+      <div class="big-num" style="color:var(--arc);margin:1.5mm 0 2mm;font-size:24pt">6.5<span style="font-size:13pt"> h today</span></div>
+      <svg viewBox="0 0 280 58" style="display:block;width:100%;height:auto" aria-hidden="true">
+        <g stroke="#1c2633" stroke-width="1"><path d="M0 8h280M0 24h280M0 40h280"/></g>
+        <g fill="#1d7f96"><rect x="6" y="22" width="28" height="34"/><rect x="46" y="15" width="28" height="41"/><rect x="86" y="30" width="28" height="26"/><rect x="126" y="18" width="28" height="38"/></g>
+        <rect x="166" y="19" width="28" height="37" fill="#3dd6f5"/>
+        <g fill="none" stroke="#3a4657" stroke-width="2" stroke-dasharray="3 3"><rect x="207" y="17" width="26" height="38"/><rect x="247" y="17" width="26" height="38"/></g>
+        <path d="M0 16h280" stroke="#e8a33d" stroke-width="2" stroke-dasharray="6 4"/>
+        <path d="M0 57h280" stroke="#2a3543" stroke-width="2"/>
+      </svg>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-top:1.5mm" class="stamp"><span>M</span><span>T</span><span>W</span><span>T</span><span style="color:var(--arc)">F</span><span>S</span><span>S</span></div>
+    </div>
+    <div class="stack" style="font-size:9pt">
+      <span class="label">Charts</span>
+      <h3>The number first. Colour keeps its meaning.</h3>
+      <p class="dim">Arc is the live or primary series and gold the warm one. Today is arc, the other days arc at rest. A dashed gold line is a plan or target; a dashed outline is a day not yet here.</p>
+      <p class="dim">Filled bars and areas use the accents one step deeper (<code>#249CB8</code>, <code>#C2842B</code>) when two series sit side by side. Lines, ticks and text keep the full tokens.</p>
+      <p class="dim">Gridlines are the only hairline in the system. Axis and legend text never goes below the floor.</p>
+    </div>
+  </div>
+  <div class="instrument" style="margin-top:auto">
+    <span class="label">In the skill folder</span>
+    <table style="margin-top:2mm">
+      <tr><td class="mono" style="border-top:0">SKILL.md</td><td style="border-top:0">The rules, as Claude reads them</td></tr>
+      <tr><td class="mono">starter.css</td><td>Tokens, type roles, the instrument and shared components</td></tr>
+      <tr><td class="mono">wall.css · charts.css</td><td>The 2 m scale; chart marks and series colours</td></tr>
+      <tr><td class="mono">fonts/ · lint.sh</td><td>Self-hosted faces with licences; the rule checker</td></tr>
+    </table>
+  </div>
+  <span class="folio">07</span>
+</section>
+
+<script>
+  // Index ticks for the cover dial.
+  const g = document.getElementById('ticks');
+  for (let i = 0; i < 60; i++) {
+    const a = (i / 60) * Math.PI * 2 - Math.PI / 2, major = i % 5 === 0;
+    const r1 = 84, r2 = major ? 76 : 80;
+    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', 100 + r1 * Math.cos(a)); l.setAttribute('y1', 100 + r1 * Math.sin(a));
+    l.setAttribute('x2', 100 + r2 * Math.cos(a)); l.setAttribute('y2', 100 + r2 * Math.sin(a));
+    l.setAttribute('stroke', i < 24 ? '#3dd6f5' : '#2a3543');
+    l.setAttribute('stroke-width', major ? 3 : 2);
+    g.appendChild(l);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+/* Charts in the Instrument language. Load after starter.css, only in projects
+   that draw charts. SKILL.md ("Charts") has the rules these implement. */
+
+:root {
+  /* Series fills. Large filled marks (bars, areas) use the accents one step
+     deeper: at full brightness a block of arc or gold glares on --panel and
+     fails the lightness band a dark chart palette needs (OKLCH L 0.48-0.67).
+     These two were checked together for colour-vision separation and for 3:1
+     against --panel. Thin marks (lines, ticks, text) keep the full tokens. */
+  --c-1: #249cb8;       /* arc, deeper */
+  --c-2: #c2842b;       /* gold, deeper */
+  --c-grid: #1c2633;    /* one step off --panel: gridlines that recede */
+}
+
+:root[data-connection="offline"] {
+  --c-1: var(--slate);
+  --c-2: #8a7350;
+}
+
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+.chart .bar { fill: var(--c-1); }
+.chart .bar-2 { fill: var(--c-2); }
+.chart .bar-rest { fill: var(--arc-dim); }   /* the days that are not the point */
+.chart .bar-off { fill: var(--slate); }      /* no data, day off, unknown */
+.chart .line { fill: none; stroke: var(--arc); stroke-width: 2; }
+.chart .line-2 { fill: none; stroke: var(--gold); stroke-width: 2; }
+/* Planned, target or expected rather than measured: dashed. */
+.chart .plan { fill: none; stroke: var(--gold); stroke-width: 2; stroke-dasharray: 6 4; }
+/* Gridlines are the one place a 1-unit line is allowed: they must sit behind
+   the data. The axis baseline is a normal engraved rule. */
+.chart .gridline { stroke: var(--c-grid); stroke-width: 1; }
+.chart .baseline { stroke: var(--engrave); stroke-width: 2; }
+
+/* Axis labels as HTML under the chart, so they hold the type floor however
+   far the SVG is scaled. Position each <span> with left: N%. */
+.chart-axis { position: relative; height: 1.5rem; margin-top: 0.375rem; }
+.chart-axis span {
+  position: absolute; top: 0; transform: translateX(-50%);
+  font-family: var(--face-mono); font-size: var(--t-min); letter-spacing: 0.04em; color: var(--ink-dim);
+}
+.chart-axis .now { color: var(--arc); }
+
+.legend {
+  display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem;
+  font-family: var(--face-mono); font-size: var(--t-min);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-dim);
+}
+.legend span { display: inline-flex; align-items: center; gap: 0.5rem; }
+.legend i { width: 10px; height: 10px; background: var(--c-1); }
+.legend i.k2 { background: var(--c-2); }
+
+.tip {
+  position: absolute; z-index: 5; pointer-events: none;
+  transform: translate(-50%, calc(-100% - 10px));
+  padding: 0.375rem 0.5rem;
+  background: var(--ground);
+  border: var(--rule) solid var(--engrave);
+  font-family: var(--face-mono); font-size: var(--t-min); letter-spacing: 0.04em;
+  color: var(--ink); white-space: nowrap;
+}
+
+/* A meter: lit ticks for the used part of an allowance, gold past it. */
+.meter { display: flex; flex-wrap: wrap; gap: 4px; }
+.meter i { width: 14px; height: 14px; border: var(--rule) solid var(--arc-dim); }
+.meter i.lit { background: var(--arc); border-color: var(--arc); }
+.meter i.past { background: var(--gold); border-color: var(--gold); }
