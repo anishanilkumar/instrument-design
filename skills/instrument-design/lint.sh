@@ -68,7 +68,7 @@ FNR == 1 { incomment = 0 }
     n = split(v, part, /[ \/]+/); bad = 0
     for (i = 1; i <= n; i++) {
       t = part[i]
-      if (t == "" || t == "0" || t ~ /^(0|1|2)px$/ || t == "50%" || t ~ /^(inherit|initial|unset)$/) continue
+      if (t == "" || t == "0" || t ~ /^(0|1|2)px$/ || t == "50%" || t ~ /^(inherit|initial|unset)$/ || t ~ /^!important/) continue
       bad = 1
     }
     if (bad) report("FAIL", "radius is 0 or 2px (50% only for dots and dials)")
