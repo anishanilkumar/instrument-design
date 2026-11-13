@@ -6,7 +6,8 @@
 #   FLOOR_PX=16 lint.sh src     wall scale: 16px type floor instead of 12px
 #
 # Directories are searched for .css, .scss, .html, .vue, .svelte, .jsx and
-# .tsx, skipping node_modules, dist and build. A line that breaks a rule on
+# .tsx, skipping node_modules, dist, build and Python virtualenvs (.venv,
+# venv, site-packages), so vendored CSS is not read as the project's. A line that breaks a rule on
 # purpose can carry the comment  instrument-lint: ok  with its reason.
 #
 # Exit status: 1 if any FAIL, otherwise 0. WARN lines need a look, not a fix.
@@ -19,7 +20,8 @@ files=()
 for p in "$@"; do
   if [ -d "$p" ]; then
     while IFS= read -r f; do files+=("$f"); done < <(
-      find "$p" \( -name node_modules -o -name dist -o -name build -o -name .git \) -prune -o \
+      find "$p" \( -name node_modules -o -name dist -o -name build -o -name .git \
+        -o -name .venv -o -name venv -o -name site-packages \) -prune -o \
         -type f \( -name '*.css' -o -name '*.scss' -o -name '*.html' -o -name '*.vue' \
         -o -name '*.svelte' -o -name '*.jsx' -o -name '*.tsx' \) -print | sort)
   elif [ -f "$p" ]; then
