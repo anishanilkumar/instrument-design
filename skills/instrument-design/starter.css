@@ -25,6 +25,17 @@
   font-weight: 500;
   font-display: swap;
 }
+/* Code only: Monaspace Neon by GitHub Next, the official variable web font,
+   unmodified (its licence reserves the name, so it is not subset or renamed).
+   It is about 500 KB, but a browser fetches it only when a page shows code.
+   Neon is the neo-grotesque of the family, so it sits beside Archivo. */
+@font-face {
+  font-family: "Monaspace Neon";
+  src: url("/fonts/monaspace-neon-var.woff2") format("woff2-variations");
+  font-weight: 200 800;
+  font-stretch: 100% 125%;
+  font-display: swap;
+}
 /* Only downloaded when a page contains Malayalam. Delete both blocks, and
    "Manjari" from the stacks below, if the project never will. */
 @font-face {
@@ -63,6 +74,9 @@
 
   --face-data: "Archivo", "Manjari", system-ui, sans-serif;
   --face-mono: "Plex Mono", ui-monospace, "Roboto Mono", monospace;
+  /* Code, not labels: Plex Mono stays the instrument's voice. Falls back to
+     Plex Mono, so a page without the code file still looks like itself. */
+  --face-code: "Monaspace Neon", "Plex Mono", ui-monospace, monospace;
   --face-malayalam: "Manjari", "Archivo", system-ui, sans-serif;
 
   /* Arm's-length scale (phone / web). For a wall display read at 2 m, load
@@ -383,6 +397,52 @@ ul, ol { list-style: none; }
 }
 .table td { padding: 0.5rem 0.5rem 0.5rem 0; border-top: var(--rule) solid var(--engrave); vertical-align: top; }
 .table .n { text-align: right; font-family: var(--face-mono); font-size: var(--t-label); white-space: nowrap; }
+
+/* ---- Code ---------------------------------------------------------------- */
+
+/* Code reads as text, so it keeps ink, not arc (arc means live or a link).
+   Texture healing ("calt") is on by default; the code ligatures (ss01-ss10)
+   stay off, because the display shows the characters that are really there. */
+code, kbd, samp, pre {
+  font-family: var(--face-code);
+  /* Monaspace runs large beside Archivo; 0.9em matches their x-heights. The
+     max() keeps code inside a stamp from dropping under the floor. */
+  font-size: max(0.9em, var(--t-min));
+  font-variant-ligatures: contextual;
+  font-feature-settings: "calt" 1, "liga" 0;
+}
+:not(pre) > code, kbd, samp {
+  padding: 0 0.3em;
+  background: var(--panel-lit);
+  border-radius: 2px;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+kbd { border: var(--rule) solid var(--engrave); padding: 0 0.35em; }
+
+/* A code block is an engraved slot cut into the panel: ground fill, 2px rule,
+   no rounded card. It scrolls sideways instead of wrapping. */
+pre {
+  font-size: max(var(--t-label), var(--t-min));
+  line-height: 1.55;
+  padding: 0.875rem 1rem;
+  background: var(--ground);
+  border: var(--rule) solid var(--engrave);
+  border-radius: 2px;
+  color: var(--ink);
+  overflow-x: auto;
+  tab-size: 2;
+}
+pre code { font-size: inherit; }
+
+/* Syntax colour, if any, stays inside the palette's meanings: no rainbow
+   themes. Comments recede, keywords are arc, strings are literal human
+   text (gold), errors are the one alert. Arc-dim is too dim for code. */
+.tok-comment { color: var(--ink-dim); }
+.tok-keyword { color: var(--arc); }
+.tok-string { color: var(--gold); }
+.tok-number { color: var(--ink); }
+.tok-error { color: var(--alert); }
 
 /* ---- Empty and loading --------------------------------------------------- */
 

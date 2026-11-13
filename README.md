@@ -39,7 +39,7 @@ same thing set as a seven-page guide is
 | `starter.css` | Tokens, type roles, the bracketed panel and the shared components, at phone / web scale |
 | `wall.css` | The scale for a fixed display read from 2 m |
 | `charts.css` | Chart marks, series colours, legend and tooltip |
-| `fonts/` | Archivo, IBM Plex Mono and Manjari, with their licences |
+| `fonts/` | Archivo, IBM Plex Mono, Monaspace Neon (code) and Manjari, with their licences |
 | `lint.sh` | Checks stylesheets for the slips a pattern can catch |
 | `guide.html`, `instrument-design.pdf` | The printed guide |
 

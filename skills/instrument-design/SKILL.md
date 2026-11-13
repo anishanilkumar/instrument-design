@@ -1,6 +1,6 @@
 ---
 name: instrument-design
-description: The "Instrument" UI style, a dark machined-instrument design language (engraved corner brackets, 2px rules, arc-blue and gold accents, Archivo + Plex Mono) that began on the Jarvis wall panel. Load before designing or styling any UI in a project that uses it (its CSS has --arc / --gold / --engrave tokens, or Archivo + Plex Mono) and whenever the instrument style is asked for. For its author, Anish, it is the default for new personal UIs (apps, PWAs, dashboards, artifacts). Skip for projects that already have their own established look unless asked to restyle them.
+description: The "Instrument" UI style, a dark machined-instrument design language (engraved corner brackets, 2px rules, arc-blue and gold accents, Archivo + Plex Mono, Monaspace Neon for code) that began on the Jarvis wall panel. Load before designing or styling any UI in a project that uses it (its CSS has --arc / --gold / --engrave tokens, or Archivo + Plex Mono) and whenever the instrument style is asked for. For its author, Anish, it is the default for new personal UIs (apps, PWAs, dashboards, artifacts). Skip for projects that already have their own established look unless asked to restyle them.
 ---
 
 # Instrument: a house UI style
@@ -22,7 +22,7 @@ anything.
 | `starter.css` | The base to copy into a new project: tokens, type roles, the instrument surface and the shared components, at arm's-length (phone / web) scale |
 | `wall.css` | Loaded after the starter for a fixed display read from 2 m: the wall scale and a viewport-derived root size |
 | `charts.css` | Loaded after the starter in projects that draw charts |
-| `fonts/` | The five self-hosted font files with their licences. Copy the whole folder |
+| `fonts/` | The six self-hosted font files with their licences. Copy the whole folder |
 | `lint.sh` | Checks stylesheets against the rules below that a pattern can check |
 | `guide.html`, `instrument-design.pdf` | The printed guide for people. A rendering of this file, not a source: don't read it for rules |
 | `LOCAL.md` | Optional, not published. If it exists, read it: it lists this machine's reference projects and which ones to leave alone |
@@ -114,9 +114,22 @@ or `--slate`; use `--ink-dim`. And offline, labels fall to `--slate-dim` (under
 |---|---|---|
 | **Archivo** (variable, 400–700) | Data, readouts, headings, body (`--face-data`) | OFL |
 | **IBM Plex Mono** (400, 500) | Labels, timestamps, status, buttons, meta, wordmark (`--face-mono`) | OFL |
+| **Monaspace Neon** (variable, 200–800) | Code only: `code`, `pre`, `kbd`, `samp`, terminal output (`--face-code`) | GitHub Next, OFL |
 | **Manjari** (400, 700) | Malayalam only, behind a `unicode-range` | SMC, OFL |
 
 - The mono is where the instrument feel comes from: engraved, not luminous.
+- **Plex Mono is the instrument's voice; Monaspace Neon is for code.** Labels,
+  stamps and buttons never switch to Monaspace, and code never uses Plex Mono
+  except as the fallback. Neon is the neo-grotesque of the
+  [Monaspace](https://monaspace.githubnext.com/) family, so it sits beside
+  Archivo. Don't mix in its other members (Argon, Xenon, Radon, Krypton).
+- Monaspace ships **unmodified**: `fonts/monaspace-neon-var.woff2` is the
+  official variable web font from the v1.400 release, renamed on disk only. Its
+  licence reserves the name "Monaspace", so don't subset, instance or rename it.
+  It is about 500 KB, but a browser downloads a face only when text uses it, so
+  pages with no code never fetch it.
+- Code keeps texture healing (`calt`, on by default) and **no code ligatures**
+  (`ss01`–`ss10` off): the display shows the characters that are really there.
 - **Self-host the fonts.** Copy this folder's `fonts/` (Latin subsets, about
   65 KB, plus Manjari) into the project's public root, licences included. Never
   use a CDN.
@@ -136,6 +149,13 @@ or `--slate`; use `--ink-dim`. And offline, labels fall to `--slate-dim` (under
 - `.stamp`: mono, tracking 0.08em, `--ink-dim`. Timestamps and meta.
 - Headings are Archivo 600, line-height ~1.05, negative tracking, `text-wrap: balance`.
 - `.wordmark`: mono 500, uppercase, tracking 0.3em, `--ink`.
+- **Code** (`code`, `kbd`, `samp`, `pre`): `--face-code` at `max(0.9em, --t-min)`,
+  in `--ink`, not arc (arc means live or a link). Inline code sits on a
+  `--panel-lit` slot with a 2px radius; `kbd` adds an engraved border. A `pre`
+  block is an engraved slot: `--ground` fill, `--rule` border in `--engrave`,
+  line-height 1.55, scrolls sideways instead of wrapping. Syntax colour stays
+  within the palette's meanings (`.tok-*` in the starter): comments `--ink-dim`,
+  keywords `--arc`, strings `--gold`, errors `--alert`. No rainbow themes.
 
 ### Scale depends on viewing distance
 
@@ -302,8 +322,11 @@ colours.
 - **A published artifact**: publish the three Latin font files as supporting
   files next to the page and reference them the same relative way. If files
   can't be published with it, inline those three as base64 `data:` URLs (about
-  90 KB). Add Manjari only if the page has Malayalam. Don't fall back to a font
-  CDN; without the files, `ui-monospace` and `system-ui` are the fallback.
+  90 KB). Add Manjari only if the page has Malayalam, and Monaspace Neon only if
+  it shows code. Monaspace is too big to inline (about 680 KB as base64): if it
+  can't be published as a file, leave it out and code falls back to Plex Mono.
+  Don't fall back to a font CDN; without the files, `ui-monospace` and
+  `system-ui` are the fallback.
 - The page is dark in both themes: set `color-scheme: dark` and an explicit
   `--ground` body background, and don't write a light variant.
 
@@ -328,6 +351,7 @@ might be wrong, say how old it is.
 ## Checklist for a new project
 
 1. Copy `starter.css` as the base stylesheet and `fonts/` into the public root.
+   A project that never shows code can delete the Monaspace block and file.
    Add `wall.css` for a wall display, `charts.css` if there are charts.
 2. Fill in the header comment: the project, the lineage, each deliberate departure.
 3. Add semantic aliases for the project's states and document any new colour.

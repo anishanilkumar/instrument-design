@@ -12,6 +12,7 @@
 @font-face { font-family: "Archivo"; src: url("fonts/archivo-var.woff2") format("woff2-variations"); font-weight: 400 700; }
 @font-face { font-family: "Plex Mono"; src: url("fonts/plexmono-400.woff2") format("woff2"); font-weight: 400; }
 @font-face { font-family: "Plex Mono"; src: url("fonts/plexmono-500.woff2") format("woff2"); font-weight: 500; }
+@font-face { font-family: "Monaspace Neon"; src: url("fonts/monaspace-neon-var.woff2") format("woff2-variations"); font-weight: 200 800; font-stretch: 100% 125%; }
 @font-face { font-family: "Manjari"; src: url("fonts/Manjari-Regular.woff2") format("woff2"); font-weight: 400; unicode-range: U+0D00-0D7F, U+200C-200D, U+20B9; }
 @font-face { font-family: "Manjari"; src: url("fonts/Manjari-Bold.woff2") format("woff2"); font-weight: 700; unicode-range: U+0D00-0D7F, U+200C-200D, U+20B9; }
 
@@ -22,6 +23,7 @@
   --slate: #55647a; --slate-dim: #3a4657; --go: #4fd68a;
   --face-data: "Archivo", "Manjari", system-ui, sans-serif;
   --face-mono: "Plex Mono", ui-monospace, monospace;
+  --face-code: "Monaspace Neon", "Plex Mono", ui-monospace, monospace;
   --rule: 2px; --bracket: 14px;
 }
 
@@ -57,8 +59,8 @@ h3 { font-size: 11.5pt; font-weight: 600; line-height: 1.2; }
 p { max-width: 62ch; }
 .lede { font-size: 11.5pt; color: var(--ink); max-width: 58ch; }
 .dim { color: var(--ink-dim); }
-code, .mono { font-family: var(--face-mono); font-size: 8.5pt; }
-code { color: var(--arc); }
+.mono { font-family: var(--face-mono); font-size: 8.5pt; }
+code { font-family: var(--face-code); font-size: 8pt; color: var(--ink); background: var(--panel-lit); padding: 0 0.3em; border-radius: 2px; font-feature-settings: "calt" 1, "liga" 0; }
 
 .label {
   font-family: var(--face-mono); font-size: 7.5pt; font-weight: 500;
@@ -112,6 +114,9 @@ code { color: var(--arc); }
 .specimen { display: grid; grid-template-columns: 38mm 1fr; gap: 4mm; padding: 4mm 0; border-top: var(--rule) solid var(--engrave); align-items: baseline; }
 .specimen .big { font-size: 40pt; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
 .specimen .mono-big { font-family: var(--face-mono); font-size: 22pt; font-weight: 500; letter-spacing: 0.06em; }
+.specimen .code-big { font-family: var(--face-code); font-size: 15pt; font-weight: 400; font-feature-settings: "calt" 1, "liga" 0; }
+.codeblock { font-family: var(--face-code); font-size: 8pt; line-height: 1.55; background: var(--ground); border: var(--rule) solid var(--engrave); border-radius: 2px; padding: 3mm 4mm; color: var(--ink); white-space: pre; font-feature-settings: "calt" 1, "liga" 0; }
+.codeblock .c { color: var(--ink-dim); } .codeblock .k { color: var(--arc); } .codeblock .s { color: var(--gold); }
 .specimen .ml { font-family: "Manjari", sans-serif; font-size: 20pt; font-weight: 700; }
 table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
 th { text-align: left; font-family: var(--face-mono); font-weight: 500; font-size: 7pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--arc-dim); padding: 0 2mm 2mm 0; }
@@ -269,15 +274,16 @@ td.mono { color: var(--ink-dim); }
   <div class="runner"><b>Instrument</b><span>03 · Typography</span></div>
   <div class="stack">
     <span class="label">Typefaces</span>
-    <h2>Archivo reads out. Plex Mono engraves.</h2>
+    <h2>Archivo reads out. Plex Mono engraves. Monaspace sets code.</h2>
   </div>
 
   <div>
     <div class="specimen"><div><div class="label">Archivo</div><div class="stamp">Variable 400–700 · data, headings, body</div></div><div class="big">21:24 · 3 min</div></div>
     <div class="specimen"><div><div class="label">IBM Plex Mono</div><div class="stamp">400 / 500 · labels, stamps, buttons</div></div><div class="mono-big">NEXT TRAIN</div></div>
+    <div class="specimen"><div><div class="label">Monaspace Neon</div><div class="stamp">Variable · code only</div></div><div class="code-big">fill: var(--arc); // mm ww</div></div>
     <div class="specimen"><div><div class="label">Manjari</div><div class="stamp">400 / 700 · Malayalam only</div></div><div class="ml">കോഴിക്കോടൻ ബിരിയാണി</div></div>
   </div>
-  <p class="dim" style="font-size:9pt">All three are OFL-licensed and self-hosted; never a CDN. Manjari sits behind a Malayalam <code>unicode-range</code>, so pages without Malayalam never download it. Numerals are always tabular, so a countdown going from 11 to 10 doesn't make the row twitch.</p>
+  <p class="dim" style="font-size:9pt">All four are OFL-licensed and self-hosted; never a CDN. Manjari sits behind a Malayalam <code>unicode-range</code>, so pages without Malayalam never download it. Monaspace Neon ships unmodified and loads only where there is code; texture healing on, code ligatures off. Plex Mono stays the instrument's voice for labels and stamps. Numerals are always tabular, so a countdown going from 11 to 10 doesn't make the row twitch.</p>
 
   <div class="grid2" style="align-items:start">
     <div class="roles">
